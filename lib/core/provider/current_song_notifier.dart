@@ -1,4 +1,5 @@
 // ignore_for_file: avoid_public_notifier_properties
+import 'package:just_audio_background/just_audio_background.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:spotify_clone/features/home/model/song_model.dart';
 import 'package:just_audio/just_audio.dart';
@@ -17,8 +18,17 @@ class CurrentSongNotifier extends _$CurrentSongNotifier {
   }
 
   void updateSong(SongModel currentSong) async {
+    await audioPlayer?.stop();
     audioPlayer = AudioPlayer();
-    final audioSource = AudioSource.uri(Uri.parse(currentSong.song_url));
+    final audioSource = AudioSource.uri(Uri.parse(currentSong.song_url),
+        tag: MediaItem(
+            id: currentSong.id,
+            title:
+                currentSong.song_name == "" ? "Unknown" : currentSong.song_name,
+            artist: currentSong.artist == ""
+                ? "Unknown Artist"
+                : currentSong.artist,
+            artUri: Uri.parse(currentSong.thumbnail_url)));
     await audioPlayer!.setAudioSource(audioSource);
 
     audioPlayer!.playerStateStream.listen((event) {

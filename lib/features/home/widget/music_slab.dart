@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:spotify_clone/core/colors/app_pallete.dart';
 import 'package:spotify_clone/core/provider/current_song_notifier.dart';
 import 'package:spotify_clone/core/widgets/utils.dart';
+import 'package:spotify_clone/features/home/viewmodel/home_vierwmodel.dart';
 import 'package:spotify_clone/features/home/widget/music_player.dart';
 
 class MusicSlab extends ConsumerWidget {
@@ -86,7 +87,11 @@ class MusicSlab extends ConsumerWidget {
                 Row(
                   children: [
                     IconButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          await ref
+                              .read(homeViewModelProvider.notifier)
+                              .makeSongFav(songID: currentSong.id);
+                        },
                         icon: const Icon(
                           CupertinoIcons.heart,
                           color: AppPallete.whiteColor,

@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:spotify_clone/core/colors/app_pallete.dart';
 import 'package:spotify_clone/core/provider/current_song_notifier.dart';
+import 'package:spotify_clone/features/home/viewmodel/home_vierwmodel.dart';
 
 class MusicPlayer extends ConsumerWidget {
   const MusicPlayer({
@@ -83,7 +84,11 @@ class MusicPlayer extends ConsumerWidget {
                       ),
                       const Expanded(child: SizedBox()),
                       IconButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            await ref
+                              .read(homeViewModelProvider.notifier)
+                              .makeSongFav(songID: currentSong.id);
+                          },
                           icon: const Icon(CupertinoIcons.heart))
                     ],
                   ),

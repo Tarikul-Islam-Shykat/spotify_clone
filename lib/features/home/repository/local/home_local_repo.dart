@@ -10,16 +10,24 @@ HomeLocalRepo homeLocalRepo(HomeLocalRepoRef ref) {
 }
 
 class HomeLocalRepo {
-  final Box homeLocalBox = Hive.box("localSongBox");
+  late final Box box;
+
+  HomeLocalRepo() {
+    if (!Hive.isBoxOpen("localSongBox")) {
+      throw HiveError(
+          'localSongBox is not open. Make sure to open it before using HomeLocalRepo.');
+    }
+    box = Hive.box("localSongBox");
+  }
 
   void uploadSong(SongModel song) {
-    homeLocalBox.put(song.id, song.toJson());
+    box.put(song.id, song.toJson());
   }
 
   List<SongModel> fetchSongFromLocal() {
     List<SongModel> song = [];
-    for (final key in homeLocalBox.keys) {
-      song.add(SongModel.fromJson(homeLocalBox.get(key)));
+    for (final key in box.keys) {
+      song.add(SongModel.fromJson(box.get(key)));
     }
     return song;
   }
